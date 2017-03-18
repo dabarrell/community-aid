@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
 
@@ -13,7 +13,6 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-
 def news_feed(request):
 	return HttpResponse("This is the news feed")
 
@@ -23,9 +22,6 @@ def item(request, item_id):
 
 def map(request):
 	return HttpResponse("This is the map")
-
-def login(request):
-	return HttpResponse("This is the login page")
 
 def create(request):
 	return HttpResponse("This is the item creation page")
