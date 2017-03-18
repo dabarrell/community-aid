@@ -5,7 +5,7 @@ from django.db import models
 from .models import *
 
 
-from .models import Item_Category, Item
+from .models import Item_Category, Item, User
 
 # Create your views here.
 def index(request):
@@ -27,8 +27,9 @@ def item(request, item_id):
 	return HttpResponse(template.render(context, request))
 
 def submitted(request):
+	user = User.objects.get(user=request.user)
 	context = {"item_name":request.POST.get("item_name")}
-	submit_item(request.POST)
+	submit_item(request.POST, user)
 	template = loader.get_template('lifeline/submitted.html')
 
 	return HttpResponse(template.render(context, request))
@@ -38,7 +39,13 @@ def map(request):
 
 def create(request):
 
-	user = request.user
+	if not request.user.is_authenticated:
+		print('tester')
+		return redirect("lifeline:login")
+
+	user = User.objects.get(user=request.user)
+
+
 	categories = Item_Category.objects.all()
 	priorities = Item_Priority.objects.all()
 	types = Item_Type.objects.all()
@@ -56,7 +63,7 @@ def create(request):
 
 
 #make the user added to this
-def submit_item(post):
+def submit_item(post, user):
 
 	priority_string = post.get('item_priority')
 	category_string = post.get('item_category')
@@ -65,7 +72,7 @@ def submit_item(post):
 	item = Item(
 		item_name=post.get('item_name'),
 		item_description=post.get('item_description'),
-		user=post.get('user'),
+		user=user,
 		item_location=post.get('item_location'),
 		item_priority=Item_Priority.objects.get(priority_name=priority_string),
 		item_category=Item_Category.objects.get(category_name=category_string),
