@@ -7,7 +7,7 @@ from .models import *
 
 from .models import Item_Category, Item, User
 
-# Create your views here.
+
 def index(request):
 	items = Item.objects.all()
 	template = loader.get_template('lifeline/index.html')
@@ -18,8 +18,20 @@ def index(request):
 
 
 def item(request, item_id):
+
+	#get rid of the dummy ID here
+
+	DUMMY_ID='69abafa5-1179-4a2f-b5ab-e02508d94445'
+
+	item = DUMMY_ID
+
 	context = {
-		'item_name': Item.objects.get(pk=item_id)
+		'item_name': Item.objects.get(pk=item).item_name,
+		'item_description': Item.objects.get(pk=item).item_description,
+		'item_priority': Item.objects.get(pk=item).item_priority,
+		'item_category': Item.objects.get(pk=item).item_category,
+		'item_type': Item.objects.get(pk=item).item_type,
+		'item_location': Item.objects.get(pk=item).item_location,
 
 	}
 	template = loader.get_template('lifeline/item.html')

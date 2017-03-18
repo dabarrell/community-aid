@@ -3,7 +3,7 @@ from .models import Item, Comment, Item_Type, Item_Category, Item_Priority, User
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('created_at', 'item_name', 'item_category')
+    list_display = ('created_at', 'item_name', 'item_category', 'id')
     date_hierarchy = 'created_at'
     search_fields = ('item_name', 'item_category')
 
