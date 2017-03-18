@@ -33,7 +33,7 @@ def map(request):
 
 def create(request):
 
-
+	user = request.user
 	categories = Item_Category.objects.all()
 	priorities = Item_Priority.objects.all()
 	types = Item_Type.objects.all()
@@ -45,11 +45,12 @@ def create(request):
 		'categories': categories,
 		'types': types,
 		'test': test,
+		'user' : user,
 	}
 	return HttpResponse(template.render(context, request))
 
 
-
+#make the user added to this
 def submit_item(post):
 
 	priority_string = post.get('item_priority')

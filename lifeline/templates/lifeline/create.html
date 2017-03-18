@@ -1,6 +1,7 @@
 <b>Create Post </b>
 <br><br><br><br>
 
+
 <form action="{% url 'lifeline:submitted' %}" method="post">
 {% csrf_token %}
 
@@ -32,3 +33,6 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 <input type="submit" value="Post" href="www.google.com" />
 
 </form>
+<br><br><br><br>
+
+<i> Logged in as: {{user}} <i>
