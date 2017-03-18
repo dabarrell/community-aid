@@ -36,9 +36,12 @@
           title: "{{ item.item_name }}"
         });
 
+  
 google.maps.event.addListener(marker, 'click', function() {
-    window.location.href = this.url;
-});
+   window.location.href = this.url;
+}); 
+
+
 
       {% endif %}
     {% endfor %}

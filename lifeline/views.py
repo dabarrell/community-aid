@@ -78,9 +78,9 @@ def item(request, item_id):
 
 	#get rid of the dummy ID here
 
-	DUMMY_ID='7f8de92e-efc2-4c69-8f48-8612fab4b3a6'
+	#DUMMY_ID='7f8de92e-efc2-4c69-8f48-8612fab4b3a6'
 
-	item = DUMMY_ID
+	item = item_id
 
 	context = {
 		'item_id': item,
