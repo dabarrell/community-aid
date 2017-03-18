@@ -14,13 +14,13 @@ class Item(models.Model):
 
 
 class Item_Priority(models.Model):
-	priority = models.CharField(max_length=20)
+	item_priority = models.CharField(max_length=20)
 
 class Item_Category(models.Model):
-	category = models.CharField(max_length=40)
+	item_ategory = models.CharField(max_length=40)
 
 class Item_Type(models.Model):
-	type = models.CharField(max_length=20)
+	item_type = models.CharField(max_length=20)
 
 
 class Comment(models.Model):
