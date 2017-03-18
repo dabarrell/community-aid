@@ -25,6 +25,8 @@ Item name:  <input type="text" name="item_name"> <br> <br>
 Item location:  <input type="hidden" name="latitude" id="latitude" value="" />
 <input type="hidden" name="longitude" id="longitude" value="" />
 
+<input id="pac-input" width="200px"/>
+
 <div id="map"></div>
 
 <br> <br>
@@ -60,9 +62,15 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 	<script>
 		function initMap() {
 			var map = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: -34.397, lng: 150.644},
-				zoom: 11
+				center: {lat: -37.8001998, lng: 144.9641445},
+				zoom: 13
 			});
+			var input = /** @type {!HTMLInputElement} */ (
+	    document.getElementById('pac-input'));
+		  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+		  var autocomplete = new google.maps.places.Autocomplete(input);
+		  autocomplete.bindTo('bounds', map);
 
 			// Try HTML5 geolocation.
 			if (navigator.geolocation) {
@@ -78,10 +86,51 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 					var marker = new google.maps.Marker({
 				    position: pos,
 				    map: map,
-				    title: 'Hello World!'
+						draggable: true,
+						animation: google.maps.Animation.DROP
 				  });
+					marker.addListener('click', toggleBounce);
+
+					marker.setIcon( /** @type {google.maps.Icon} */ ({
+						url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+						size: new google.maps.Size(71, 71),
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(17, 34),
+						scaledSize: new google.maps.Size(35, 35)
+					}));
 
 					map.setCenter(pos);
+
+					google.maps.event.addListener(marker, 'dragend', function() {
+						document.getElementsByName('latitude')[0].value = marker.getPosition().lat();
+						document.getElementsByName('longitude')[0].value = marker.getPosition().lng();
+						// var pos = {
+						// 	lat: marker.getPosition().lat(),
+						// 	lng: marker.getPosition().lng()
+						// };
+						// marker.getMap().setCenter(pos);
+					})
+
+					autocomplete.addListener('place_changed', function() {
+				    marker.setVisible(false);
+				    var place = autocomplete.getPlace();
+				    if (!place.geometry) {
+				      window.alert("Autocomplete's returned place contains no geometry");
+				      return;
+				    }
+
+				    // If the place has a geometry, then present it on a map.
+				    if (place.geometry.viewport) {
+				      map.fitBounds(place.geometry.viewport);
+				    } else {
+				      map.setCenter(place.geometry.location);
+				      map.setZoom(11); // Why 17? Because it looks good.
+				    }
+
+				    marker.setPosition(place.geometry.location);
+				    marker.setVisible(true);
+
+				  });
 				}, function() {
 					handleLocationError(true, map);
 				});
@@ -89,6 +138,14 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 				// Browser doesn't support Geolocation
 				handleLocationError(false, map);
 			}
+		}
+
+		function toggleBounce() {
+		  if (marker.getAnimation() !== null) {
+		    marker.setAnimation(null);
+		  } else {
+		    marker.setAnimation(google.maps.Animation.BOUNCE);
+		  }
 		}
 
 		function handleLocationError(browserHasGeolocation, map) {
@@ -99,8 +156,8 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 														'Error: Your browser doesn\'t support geolocation.');
 		}
 	</script>
-	<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
+	<script async defer type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap&libraries=places">
 	</script>
 
 {% endblock %}
