@@ -1,0 +1,17 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+
+Username: {{ user.user.username }}
+<br><br>
+Name: {{ user.full_name }}
+<br><br>
+Email: {{ user.user.email }}
+<br><br>
+Phone number: {{ user.phone }}
+{% endblock %}

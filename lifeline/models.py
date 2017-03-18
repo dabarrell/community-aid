@@ -6,7 +6,7 @@ from django.utils.timesince import timesince
 
 
 class BaseModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     enabled = models.BooleanField(default=True, verbose_name='active')
@@ -54,8 +54,8 @@ class Item(BaseModel):
 	user = models.ForeignKey(User,blank=True,null=True)
 	item_name = models.CharField(max_length=100,blank=True,null=True)
 	item_description = models.CharField(max_length=500,blank=True,null=True)
-	item_latitude = models.CharField(max_length=100,blank=True,null=True)
-	item_longitude = models.CharField(max_length=100,blank=True,null=True)
+	item_latitude = models.FloatField(blank=True,null=True)
+	item_longitude = models.FloatField(blank=True,null=True)
 	item_priority = models.ForeignKey(Item_Priority, on_delete=models.CASCADE,blank=True,null=True)
 	item_category = models.ForeignKey(Item_Category, on_delete=models.CASCADE,blank=True,null=True)
 	item_type = models.ForeignKey(Item_Type, on_delete=models.CASCADE,blank=True,null=True)

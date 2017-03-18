@@ -29,14 +29,33 @@
           lng: {{ item.item_longitude }}
         };
 
+        
+
+
+
+
+    var infowindow = new google.maps.InfoWindow({
+          content: '{{item.item_name}}'
+        });
+
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
-          url: 'http://www.google.com/',
-          title: "{{ item.item_name }}"
+          title: '{{item.item_name}}'
         });
+        bindInfoWindow(marker, map, infowindow,
+              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br> <i>{{item.item_type}}, {{item.created_at}} <br><br></i>{{item.item_description}}</a>'); 
+
+
       {% endif %}
     {% endfor %}
+
+    function bindInfoWindow(marker, map, infowindow, html) {
+    marker.addListener('click', function() {
+        infowindow.setContent(html);
+        infowindow.open(map, this);
+    });
+}
 
 
   }
