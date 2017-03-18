@@ -5,14 +5,14 @@ from django.db import models
 from .models import *
 
 
-from .models import Item_Category
+from .models import Item_Category, Item
 
 # Create your views here.
 def index(request):
-	categories = Item_Category.objects.all()
+	items = Item.objects.all()
 	template = loader.get_template('lifeline/index.html')
 	context = {
-		'categories': categories,
+		'items': items,
 	}
 	return HttpResponse(template.render(context, request))
 
