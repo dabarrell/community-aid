@@ -1,0 +1,26 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Register</h1>
+
+<form action="{% url 'lifeline:registerComplete' %}" method="post">
+{% csrf_token %}
+
+Username:  <input type="text" name="username"> <br> <br>
+Password:  <input type="password" name="password"> <br> <br>
+First name:  <input type="text" name="firstname"> <br> <br>
+Last name:  <input type="text" name="lastname"> <br> <br>
+Email:  <input type="text" name="email"> <br> <br>
+Phone number:  <input type="text" name="phone"> <br> <br>
+
+<input type="submit" value="Post"/>
+
+</form>
+<br><br><br><br>
+
+{% endblock %}

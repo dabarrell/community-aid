@@ -3,10 +3,11 @@ from django.http import HttpResponse
 from django.template import loader
 from django.db import models
 from .models import *
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, login
 
 from .models import Item_Category, Item, User
-
+from django.contrib.auth.models import User as DefaultUser
 
 def index(request):
 	items = Item.objects.all()
@@ -43,6 +44,7 @@ def item(request, item_id):
 
 	return HttpResponse(template.render(context, request))
 
+@login_required
 def submitted(request):
 	user = User.objects.get(user=request.user)
 	context = {"item_name":request.POST.get("item_name")}
@@ -51,7 +53,7 @@ def submitted(request):
 
 	return HttpResponse(template.render(context, request))
 
-
+@login_required
 def comment_submitted(request):
 
 	user = User.objects.get(user=request.user)
@@ -69,14 +71,9 @@ def map(request):
 	template = loader.get_template('lifeline/map.html')
 	return HttpResponse(template.render(context, request))
 
+@login_required
 def create(request):
-
-	if not request.user.is_authenticated:
-		print('tester')
-		return redirect("lifeline:login")
-
 	user = User.objects.get(user=request.user)
-
 
 	categories = Item_Category.objects.all()
 	priorities = Item_Priority.objects.all()
@@ -90,6 +87,49 @@ def create(request):
 		'user' : user,
 	}
 	return HttpResponse(template.render(context, request))
+
+@login_required
+def profile(request):
+	user = User.objects.get(user=request.user)
+
+	template = loader.get_template('lifeline/profile.html')
+	context = {
+		'user' : user
+	}
+	return HttpResponse(template.render(context, request))
+
+def register(request):
+	template = loader.get_template('registration/register.html')
+	context = { }
+	return HttpResponse(template.render(context, request))
+
+def registerComplete(request):
+	print(request.POST.get("username"))
+	username = request.POST.get("username")
+	firstname = request.POST.get("firstname")
+	lastname = request.POST.get("lastname")
+	phone = request.POST.get("phone")
+	email = request.POST.get("email")
+	password = request.POST.get("password")
+
+	defaultUser = DefaultUser.objects.create_user(username, email, password)
+	defaultUser.last_name = lastname
+	defaultUser.first_name = firstname
+	defaultUser.email = email
+	defaultUser.save()
+
+	user = User (
+		user = defaultUser,
+		phone = phone
+	)
+	user.save()
+	login(request, defaultUser)
+	return redirect('/')
+
+
+def logout_view(request):
+	logout(request)
+	return redirect('/')
 
 
 #make the user added to this
@@ -123,4 +163,3 @@ def submit_comment(post,user):
 		user = user
 	)
 	comment.save()
-
