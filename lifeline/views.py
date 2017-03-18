@@ -9,6 +9,8 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.models import User as DefaultUser
 from .models import Item_Category, Item, User, Item_Type
 
+from django.db.models import Q
+
 def index(request):
 
 	#default sort key is by time
@@ -22,12 +24,22 @@ def index(request):
 	if request.POST.get("filter"):
 		filters = request.POST.getlist("filter")
 
+	f1 = -1
+	f2 = -1
+	f3 = -1
 
-	#commented out code doesnt work
+	if 'offer' in filters:
+		f1 = Item_Type.objects.get(type_name='Offer').id
+
+	if 'request' in filters:
+		f2 = Item_Type.objects.get(type_name='Request').id
+
+	if 'alert' in filters:
+		f3 = Item_Type.objects.get(type_name='Alert').id
+
+
 	item_type_id = Item_Type.objects.get(type_name='Alert').id
-	items = Item.objects.filter(item_type__exact =item_type_id)#.order_by(sort_key)
-	#items = Item.objects.all()#.order_by(sort_key)
-
+	items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3)  ).order_by(sort_key)
 
 	if reverse:
 		items = items.reverse()
