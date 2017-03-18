@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static "lifeline/css/semantic.css" %}">
+</head>
+
+<body>
+    <div class="ui menu">
+        <div class="header item">LIFELINE</div>
+        <a class="item">News Feed</a>
+        <a class="item">Post Request</a>
+        <a class="item">Map</a>
+        <div class=""></div>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+
+</html>
