@@ -1,0 +1,9 @@
+{% if categories %}
+    <ul>
+    {% for cat in categories %}
+        <li><a href="/lifeline/{{ cat.id }}/">{{ cat.category_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No categories are available.</p>
+{% endif %}
