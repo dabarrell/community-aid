@@ -14,13 +14,13 @@ class Item(models.Model):
 
 
 class Item_Priority(models.Model):
-	item_priority = models.CharField(max_length=20)
+	priority_name = models.CharField(max_length=20)
 
 class Item_Category(models.Model):
-	item_ategory = models.CharField(max_length=40)
+	category_name = models.CharField(max_length=40)
 
 class Item_Type(models.Model):
-	item_type = models.CharField(max_length=20)
+	type_name = models.CharField(max_length=20)
 
 
 class Comment(models.Model):
@@ -28,4 +28,5 @@ class Comment(models.Model):
 	author_name = models.CharField(max_length=100)
 	author_phone = models.Charfield(max_length=12)
 	created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 	item = models.ForeignKey(Item, on_delete=models.CASCADE)
