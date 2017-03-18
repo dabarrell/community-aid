@@ -32,9 +32,14 @@
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
-          url: 'http://www.google.com/',
+          url: '../item/{{item.id}}',
           title: "{{ item.item_name }}"
         });
+
+google.maps.event.addListener(marker, 'click', function() {
+    window.location.href = this.url;
+});
+
       {% endif %}
     {% endfor %}
 
