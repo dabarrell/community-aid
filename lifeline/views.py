@@ -60,9 +60,8 @@ def comment_submitted(request):
 		"item":request.POST.get("item")
 		}
 	submit_comment(request.POST, user)
-	template = loader.get_template('lifeline/comment_submitted.html')
 
-	return HttpResponse(template.render(context, request))
+	return redirect("/item/"+request.POST.get("item"))
 
 def map(request):
 	items = Item.objects.all()
