@@ -1,6 +1,30 @@
 {% extends "lifeline/base.html" %}
 
 {% block content %}
+<form action="{% url 'lifeline:index' %}" method="post">
+{% csrf_token %}
+
+
+<br>
+
+Sort By: &nbsp <select name="sort_key"> &nbsp
+    <option value="created_at"> Time</option>
+    <option value="item_priority"> Priority</option>
+    <!-- <option value="distance"> Distance</option> -->
+  </select> &nbsp
+
+  Include:
+
+<input type="checkbox" name="filter" value="offer" checked />&nbsp Offers &nbsp
+<input type="checkbox" name="filter" value="request" checked /> &nbsp Requests  &nbsp
+<input type="checkbox" name="filter" value="alert" checked />&nbsp Alerts&nbsp
+
+  <input type="submit" value="Search"/>
+
+</form>
+
+<br><br>
+
 {% if items %}
 <div class="ui feed">
     {% for item in items %}

@@ -9,7 +9,27 @@ from .models import Item_Category, Item, User
 
 
 def index(request):
-	items = Item.objects.all()
+
+	#default sort key is by time
+	sort_key = 'created_at'
+	reverse = True
+	filters = ['offer', 'request', 'alert']
+	print(request.POST)
+
+	if request.POST.get("sort_key"):
+		sort_key = request.POST.get("sort_key")
+	if request.POST.get("filter"):
+		filters = request.POST.getlist("filter")
+
+
+	#commented out code doesnt work
+	
+	#items = list(Item.objects.filter(item_type__exact ='Alert'))#.order_by(sort_key)
+	items = Item.objects.all()#.order_by(sort_key)
+
+
+	if reverse:
+		items = items.reverse()
 	template = loader.get_template('lifeline/index.html')
 	context = {
 		'items': items,
