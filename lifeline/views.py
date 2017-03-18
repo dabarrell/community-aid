@@ -65,7 +65,10 @@ def comment_submitted(request):
 	return HttpResponse(template.render(context, request))
 
 def map(request):
-	return HttpResponse("This is the map")
+	items = Item.objects.all()
+	context = { "items": items }
+	template = loader.get_template('lifeline/map.html')
+	return HttpResponse(template.render(context, request))
 
 def create(request):
 
