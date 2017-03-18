@@ -8,7 +8,7 @@ from django.contrib.auth import logout, login
 
 from django.contrib.auth.models import User as DefaultUser
 from .models import Item_Category, Item, User, Item_Type
-from .utils import distance, distanceWrapper
+from .utils import distance, distanceWrapper, sendMessage
 
 from django.db.models import Q
 
@@ -74,11 +74,6 @@ def index(request):
 	return HttpResponse(template.render(context, request))
 
 def item(request, item_id):
-
-	#display location on map
-
-	#get rid of the dummy ID here
-
 	#DUMMY_ID='7f8de92e-efc2-4c69-8f48-8612fab4b3a6'
 
 	item = item_id
@@ -92,7 +87,7 @@ def item(request, item_id):
 		'item_type': Item.objects.get(pk=item).item_type,
 		'item_longitude': Item.objects.get(pk=item).item_longitude,
 		'item_latitude': Item.objects.get(pk=item).item_latitude,
-		'comments' : Comment.objects.filter(item_id=item)
+		'comments' : Comment.objects.filter(item_id=item).order_by('created_at')
 
 	}
 	template = loader.get_template('lifeline/item.html')
@@ -181,13 +176,10 @@ def registerComplete(request):
 	login(request, defaultUser)
 	return redirect('/')
 
-
 def logout_view(request):
 	logout(request)
 	return redirect('/')
 
-
-#make the user added to this
 def submit_item(post, user):
 
 	priority_string = post.get('item_priority')
@@ -208,10 +200,11 @@ def submit_item(post, user):
 	)
 	item.save()
 
-
-#add datetime
-
 def submit_comment(post,user):
+	item = Item.objects.get(pk=post.get('item'))
+	message = 'New comment on your request: ' + post.get('comment_text')
+	sendMessage(message, item.user.phone)
+
 	comment = Comment(
 		item_id = post.get('item'),
 		comment_text = post.get('comment_text'),

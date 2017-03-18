@@ -43,7 +43,7 @@ Comments:
 
 {% for comment in comments %}
 		<br><br>
-		<b>{{comment.user}} </b>,  <i> {{comment.created_at}} </i>
+		<b>{{comment.user.full_name}}</b>,  <i> {{comment.created_at}} </i>
 		<br>
 		{{comment.comment_text}}
 		<br><br>

@@ -1,4 +1,5 @@
 from math import radians, cos, sin, asin, sqrt
+from twilio.rest import TwilioRestClient
 
 def distance(lon1, lat1, lon2, lat2):
     """
@@ -18,3 +19,18 @@ def distance(lon1, lat1, lon2, lat2):
 
 def distanceWrapper(item, userlat, userlng):
     return distance(item.item_longitude, item.item_latitude, float(userlng), float(userlat))
+
+def sendMessage(msg,number):
+    # put your own credentials here
+    ACCOUNT_SID = 'ACf707ea7d265d7bd6b1f038c71639168e'
+    AUTH_TOKEN = '23f2f33f29c6da0d54922db9079965c6'
+
+    client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
+    number = '0425864138'
+
+    print('Sending message to ' + number)
+    client.messages.create(
+        to = number,
+        from_ = '+61428954627',
+        body = msg,
+    )
