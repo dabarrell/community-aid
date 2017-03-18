@@ -48,14 +48,16 @@ class Item_Type(BaseModel):
 	def __str__(self):
 		return self.type_name
 
+
+# GET RID OF BLANK, NULLS
 class Item(BaseModel):
-	user = models.ForeignKey(User)
-	item_name = models.CharField(max_length=100)
-	item_description = models.CharField(max_length=500)
-	item_location = models.CharField(max_length=100) #change this to the location type
-	item_priority = models.ForeignKey(Item_Priority, on_delete=models.CASCADE)
-	item_category = models.ForeignKey(Item_Category, on_delete=models.CASCADE)
-	item_type = models.ForeignKey(Item_Type, on_delete=models.CASCADE)
+	user = models.ForeignKey(User,blank=True,null=True)
+	item_name = models.CharField(max_length=100,blank=True,null=True)
+	item_description = models.CharField(max_length=500,blank=True,null=True)
+	item_location = models.CharField(max_length=100,blank=True,null=True) #change this to the location type
+	item_priority = models.ForeignKey(Item_Priority, on_delete=models.CASCADE,blank=True,null=True)
+	item_category = models.ForeignKey(Item_Category, on_delete=models.CASCADE,blank=True,null=True)
+	item_type = models.ForeignKey(Item_Type, on_delete=models.CASCADE,blank=True,null=True)
 
 	def __str__(self):
 		return self.item_name

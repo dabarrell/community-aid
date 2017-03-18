@@ -10,29 +10,24 @@ Item location:  <input type="text" name="item_location"> <br> <br>
 
 Item priority:  <select name="item_priority"> 
 {% for priority in priorities %}
-		<option value="1"> {{priority}}</option> 
+		<option value={{priority}}> {{priority}}</option> 
 	{% endfor %}
 	</select> <br> <br>
 
 Item category:  <select name="item_category"> 
 {% for category in categories %}
-		<option value="1"> {{category}}</option> 
+		<option value={{category}}> {{category}}</option> 
 	{% endfor %}
 	</select> <br> <br>
 
 
 Item type:  <select name="item_type"> 
 {% for type in types %}
-		<option value="1"> {{type}}</option> 
+		<option value={{type}}> {{type}}</option> 
 	{% endfor %}
 	</select> <br> <br>
 
 Item description:  <br><br><textarea name="item_description" cols="100" rows="8"> </textarea><br> <br>
-
-<br>
-Author name:  <input type="text" name="author_name"> <br> <br>
-Author contact number:  <input type="text" name="author_phone"> <br> <br>
-<br>
 
 <input type="submit" value="Post" href="www.google.com" />
 
