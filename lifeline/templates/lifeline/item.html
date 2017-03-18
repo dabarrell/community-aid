@@ -1,3 +1,17 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 500px;
+		width: 500px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
 <b>View Post </b>
 <br><br><br><br>
 
@@ -7,7 +21,8 @@ Item name: {{item_name}}
 
 <br><br>
 
-Item location:  {{item_longitude}}, {{item_latitude}}
+Item location:
+<div id="map"></div>
 <br><br>
 Item priority:  {{item_priority}}
 
@@ -54,3 +69,37 @@ Write a comment: <br><br> <textarea name="comment_text" cols="100" rows="8"> </t
 
 
 <i> Logged in as: {{user}} <i>
+
+	<script>
+	  function initMap() {
+	    var map = new google.maps.Map(document.getElementById('map'), {
+	      center: {lat: -37.8001998, lng: 144.9641445},
+	      zoom: 11
+	    });
+
+      var pos = {
+        lat: {{ item_latitude }},
+        lng: {{ item_longitude }}
+      };
+
+      var marker = new google.maps.Marker({
+        position: pos,
+        map: map
+      });
+
+			marker.setIcon( /** @type {google.maps.Icon} */ ({
+				url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(35, 35)
+			}));
+
+
+	  }
+	</script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
+	</script>
+
+{% endblock %}

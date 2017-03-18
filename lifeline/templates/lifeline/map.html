@@ -32,20 +32,13 @@
         var marker = new google.maps.Marker({
           position: pos,
           map: map,
+          url: 'http://www.google.com/',
           title: "{{ item.item_name }}"
         });
       {% endif %}
     {% endfor %}
 
 
-  }
-
-  function handleLocationError(browserHasGeolocation, map) {
-    var infoWindow = new google.maps.InfoWindow({map: map});
-    infoWindow.setPosition(map.getCenter());
-    infoWindow.setContent(browserHasGeolocation ?
-                          'Error: The Geolocation service failed.' :
-                          'Error: Your browser doesn\'t support geolocation.');
   }
 </script>
 <script async defer
