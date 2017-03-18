@@ -13,8 +13,6 @@ def index(request):
 	}
 	return HttpResponse(template.render(context, request))
 
-def news_feed(request):
-	return HttpResponse("This is the news feed")
 
 def item(request, item_id):
 	response = "You're looking at the details of item %s"
