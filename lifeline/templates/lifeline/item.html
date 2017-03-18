@@ -7,7 +7,7 @@ Item name: {{item_name}}
 
 <br><br>
 
-Item location:  {{item_location}}
+Item location:  {{item_longitude}}, {{item_latitude}}
 <br><br>
 Item priority:  {{item_priority}}
 
@@ -21,5 +21,36 @@ Item type:  {{item_type}}
 Item description:  <br> {{item_description}} <br>
 
 <br><br><br><br>
+
+Comments:
+<br><br>
+
+
+{% for comment in comments %}
+		<br><br>
+		<b>{{comment.user}} </b>,  <i> {{comment.created_at}} </i>
+		<br>
+		{{comment.comment_text}}
+		<br><br>
+	{% endfor %}
+
+<br><br>
+
+<form action="{% url 'lifeline:comment_submitted' %}" method="post">
+{% csrf_token %}
+
+Write a comment: <br><br> <textarea name="comment_text" cols="100" rows="8"> </textarea><br> <br>
+
+<br>
+
+<input type = "hidden" name="item" value="{{item_id}}">
+
+<input type="submit" value="Submit Comment"/>
+
+</form>
+
+<br><br><br><br>
+
+
 
 <i> Logged in as: {{user}} <i>
