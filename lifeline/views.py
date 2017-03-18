@@ -5,7 +5,7 @@ from django.db import models
 from .models import *
 
 
-from .models import Item_Category, Item, User
+from .models import Item_Category, Item, User, Item_Type
 
 
 def index(request):
@@ -23,9 +23,9 @@ def index(request):
 
 
 	#commented out code doesnt work
-	
-	#items = list(Item.objects.filter(item_type__exact ='Alert'))#.order_by(sort_key)
-	items = Item.objects.all()#.order_by(sort_key)
+	item_type_id = Item_Type.objects.get(type_name='Alert').id
+	items = Item.objects.filter(item_type__exact =item_type_id)#.order_by(sort_key)
+	#items = Item.objects.all()#.order_by(sort_key)
 
 
 	if reverse:
@@ -143,4 +143,3 @@ def submit_comment(post,user):
 		user = user
 	)
 	comment.save()
-
