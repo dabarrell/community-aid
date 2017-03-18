@@ -32,19 +32,16 @@ def map(request):
 	return HttpResponse("This is the map")
 
 def create(request):
-
 	user = request.user
 	categories = Item_Category.objects.all()
 	priorities = Item_Priority.objects.all()
 	types = Item_Type.objects.all()
-	test = Item_Priority.objects.get(priority_name="Low")
-	
+
 	template = loader.get_template('lifeline/create.html')
 	context = {
 		'priorities': priorities,
 		'categories': categories,
 		'types': types,
-		'test': test,
 		'user' : user,
 	}
 	return HttpResponse(template.render(context, request))
@@ -55,13 +52,15 @@ def submit_item(post):
 
 	priority_string = post.get('item_priority')
 	category_string = post.get('item_category')
+	print(post.get('item_category'))
 	type_string = post.get('item_type')
 
 	item = Item(
 		item_name=post.get('item_name'),
 		item_description=post.get('item_description'),
 		user=post.get('user'),
-		item_location=post.get('item_location'),
+		item_latitude=post.get('latitude'),
+		item_longitude=post.get('longitude'),
 		item_priority=Item_Priority.objects.get(priority_name=priority_string),
 		item_category=Item_Category.objects.get(category_name=category_string),
 		item_type=Item_Type.objects.get(type_name=type_string),

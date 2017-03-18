@@ -54,7 +54,8 @@ class Item(BaseModel):
 	user = models.ForeignKey(User,blank=True,null=True)
 	item_name = models.CharField(max_length=100,blank=True,null=True)
 	item_description = models.CharField(max_length=500,blank=True,null=True)
-	item_location = models.CharField(max_length=100,blank=True,null=True) #change this to the location type
+	item_latitude = models.CharField(max_length=100,blank=True,null=True)
+	item_longitude = models.CharField(max_length=100,blank=True,null=True)
 	item_priority = models.ForeignKey(Item_Priority, on_delete=models.CASCADE,blank=True,null=True)
 	item_category = models.ForeignKey(Item_Category, on_delete=models.CASCADE,blank=True,null=True)
 	item_type = models.ForeignKey(Item_Type, on_delete=models.CASCADE,blank=True,null=True)

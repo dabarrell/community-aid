@@ -1,3 +1,18 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 500px;
+		width: 500px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
 <b>Create Post </b>
 <br><br><br><br>
 
@@ -7,24 +22,29 @@
 
 Item name:  <input type="text" name="item_name"> <br> <br>
 
-Item location:  <input type="text" name="item_location"> <br> <br>
+Item location:  <input type="hidden" name="latitude" id="latitude" value="" />
+<input type="hidden" name="longitude" id="longitude" value="" />
 
-Item priority:  <select name="item_priority"> 
+<div id="map"></div>
+
+<br> <br>
+
+Item priority:  <select name="item_priority">
 {% for priority in priorities %}
-		<option value={{priority}}> {{priority}}</option> 
+		<option value="{{priority}}"> {{priority}}</option>
 	{% endfor %}
 	</select> <br> <br>
 
-Item category:  <select name="item_category"> 
+Item category:  <select name="item_category">
 {% for category in categories %}
-		<option value={{category}}> {{category}}</option> 
+		<option value="{{category}}"> {{category}}</option>
 	{% endfor %}
 	</select> <br> <br>
 
 
-Item type:  <select name="item_type"> 
+Item type:  <select name="item_type">
 {% for type in types %}
-		<option value={{type}}> {{type}}</option> 
+		<option value="{{type}}"> {{type}}</option>
 	{% endfor %}
 	</select> <br> <br>
 
@@ -36,3 +56,51 @@ Item description:  <br><br><textarea name="item_description" cols="100" rows="8"
 <br><br><br><br>
 
 <i> Logged in as: {{user}} <i>
+
+	<script>
+		function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: -34.397, lng: 150.644},
+				zoom: 11
+			});
+
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+
+					document.getElementById("latitude").value = position.coords.latitude;
+					document.getElementById("longitude").value = position.coords.longitude;
+
+					var marker = new google.maps.Marker({
+				    position: pos,
+				    map: map,
+				    title: 'Hello World!'
+				  });
+
+					map.setCenter(pos);
+				}, function() {
+					handleLocationError(true, map);
+				});
+			} else {
+				// Browser doesn't support Geolocation
+				handleLocationError(false, map);
+			}
+		}
+
+		function handleLocationError(browserHasGeolocation, map) {
+			var infoWindow = new google.maps.InfoWindow({map: map});
+			infoWindow.setPosition(map.getCenter());
+			infoWindow.setContent(browserHasGeolocation ?
+														'Error: The Geolocation service failed.' :
+														'Error: Your browser doesn\'t support geolocation.');
+		}
+	</script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
+	</script>
+
+{% endblock %}
