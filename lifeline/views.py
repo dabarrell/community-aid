@@ -18,8 +18,24 @@ def index(request):
 
 
 def item(request, item_id):
-	response = "You're looking at the details of item %s"
-	return HttpResponse(response % item_id)
+	DUMMY_ID='7f8de92e-efc2-4c69-8f48-8612fab4b3a6'
+	item = item_id
+
+	context = {
+		'item_id': item,
+		'item_name': Item.objects.get(pk=item).item_name,
+		'item_description': Item.objects.get(pk=item).item_description,
+		'item_priority': Item.objects.get(pk=item).item_priority,
+		'item_category': Item.objects.get(pk=item).item_category,
+		'item_type': Item.objects.get(pk=item).item_type,
+		'item_longitude': Item.objects.get(pk=item).item_longitude,
+		'item_latitude': Item.objects.get(pk=item).item_latitude,
+		'comments' : Comment.objects.filter(item_id=item)
+
+	}
+	template = loader.get_template('lifeline/item.html')
+
+	return HttpResponse(template.render(context, request))
 
 def submitted(request):
 	context = {"item_name":request.POST.get("item_name")}
@@ -70,3 +86,14 @@ def submit_item(post):
 
 	)#=post.get('item_name'))
 	item.save()
+
+
+#add datetime
+
+def submit_comment(post,user):
+	comment = Comment(
+		item_id = post.get('item'),
+		comment_text = post.get('comment_text'),
+		user = user
+	)
+	comment.save()
