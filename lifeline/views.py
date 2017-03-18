@@ -44,10 +44,11 @@ def index(request):
 		userlng = request.POST.get("longitude")
 		for item in unsorted_items:
 			item.distance = "%.1f" % distanceWrapper(item, userlat, userlng)
+			item.distanceFlt = distanceWrapper(item, userlat, userlng)
 
 	if sort_key == "distance":
 		print("Sort by distance")
-		items = sorted(unsorted_items, key= lambda item: item.distance)
+		items = sorted(unsorted_items, key= lambda item: item.distanceFlt)
 		if reverse:
 			items = list(reversed(items))
 	elif sort_key == "created_at":
