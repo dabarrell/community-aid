@@ -18,8 +18,13 @@ def index(request):
 
 
 def item(request, item_id):
-	response = "You're looking at the details of item %s"
-	return HttpResponse(response % item_id)
+	context = {
+		'item_name': Item.objects.get(pk=item_id)
+
+	}
+	template = loader.get_template('lifeline/item.html')
+
+	return HttpResponse(template.render(context, request))
 
 def submitted(request):
 	context = {"item_name":request.POST.get("item_name")}
