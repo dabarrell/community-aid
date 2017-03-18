@@ -1,0 +1,32 @@
+/* CUSTOM CLASSES */
+/*-------------------
+   LABEL PRIORITIES
+--------------------*/
+.ui.high-priority.label {
+  background-color: #DB2828 !important;
+  border-color: #DB2828 !important;
+  color: #FFFFFF !important;
+}
+.ui.medium-priority.label {
+  background-color: #FBBD08 !important;
+  border-color: #FBBD08 !important;
+  color: #FFFFFF !important;
+}
+.ui.low-priority.label {
+  background-color: #767676 !important;
+  border-color: #767676 !important;
+  color: #FFFFFF !important;
+}
+
+/*-------------------
+       CARD PRIORITIES
+--------------------*/
+.ui.cards > .high-priority.card {
+  box-shadow: 0px 0px 0px 1px #DB2828, 0px 2px 0px 0px #DB2828, 0px 1px 3px 0px #DB2828;
+}
+.ui.cards > .medium-priority.card {
+  box-shadow: 0px 0px 0px 1px #FBBD08, 0px 2px 0px 0px #FBBD08, 0px 1px 3px 0px #FBBD08;
+}
+.ui.cards > .low-priority.card {
+  box-shadow: 0px 0px 0px 1px #767676, 0px 2px 0px 0px #767676, 0px 1px 3px 0px #767676;
+}
