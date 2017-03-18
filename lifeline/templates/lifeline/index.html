@@ -7,7 +7,7 @@
 
 <br>
 
-Sort By: &nbsp <select name="sort_key"> &nbsp
+Sort By: &nbsp <select name="sort_key" id="sort_key"> &nbsp
     <option value="created_at">Time</option>
     <option value="item_priority">Priority</option>
     <option id="distanceSort" value="distance" disabled>Distance</option>
@@ -18,9 +18,9 @@ Sort By: &nbsp <select name="sort_key"> &nbsp
 
   Include:
 
-<input type="checkbox" name="filter" value="offer" checked />&nbsp Offers &nbsp
-<input type="checkbox" name="filter" value="request" checked /> &nbsp Requests  &nbsp
-<input type="checkbox" name="filter" value="alert" checked />&nbsp Alerts&nbsp
+<input type="checkbox" name="filter" id="offer" value="offer" checked />&nbsp Offers &nbsp
+<input type="checkbox" name="filter" id="request" value="request" checked /> &nbsp Requests  &nbsp
+<input type="checkbox" name="filter" id="alert" value="alert" checked />&nbsp Alerts&nbsp
 
   <input type="submit" value="Search"/>
 
@@ -63,6 +63,22 @@ Sort By: &nbsp <select name="sort_key"> &nbsp
 {% endif %}
 
 <script>
+  {% if lat %}
+    document.getElementById("distanceSort").disabled = false;
+  {% endif %}
+  {% if sort_key %}
+    $('#sort_key').val('{{ sort_key }}');
+  {% endif %}
+
+  {% if filters %}
+    $("input[name='filter']").each( function () {
+      $(this).prop('checked', false);
+    });
+    {% for filter in filters %}
+      $('#{{filter}}').prop('checked', true);
+    {% endfor %}
+  {% endif %}
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {

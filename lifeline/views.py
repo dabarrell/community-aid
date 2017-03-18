@@ -37,9 +37,8 @@ def index(request):
 	if 'alert' in filters:
 		f3 = Item_Type.objects.get(type_name='Alert').id
 
+	unsorted_items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3))
 
-	item_type_id = Item_Type.objects.get(type_name='Alert').id
-	items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3)  ).order_by(sort_key)
 	if request.POST.get("latitude"):
 		userlat = request.POST.get("latitude")
 		userlng = request.POST.get("longitude")
@@ -61,14 +60,14 @@ def index(request):
 		items = sorted(unsorted_items, key= lambda item: item.item_priority)
 		if reverse:
 			items = list(reversed(items))
-	print(items)
-
 
 	template = loader.get_template('lifeline/index.html')
 	context = {
 		'items': items,
 		'lat': request.POST.get("latitude"),
-		'lng': request.POST.get("longitude")
+		'lng': request.POST.get("longitude"),
+		'sort_key': sort_key,
+		'filters': filters
 	}
 	print(context)
 	return HttpResponse(template.render(context, request))
