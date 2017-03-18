@@ -8,6 +8,7 @@ from django.contrib.auth import logout, login
 
 from django.contrib.auth.models import User as DefaultUser
 from .models import Item_Category, Item, User, Item_Type
+from .utils import distance, distanceWrapper
 
 from django.db.models import Q
 
@@ -15,9 +16,8 @@ def index(request):
 
 	#default sort key is by time
 	sort_key = 'created_at'
-	reverse = True
+	reverse = False
 	filters = ['offer', 'request', 'alert']
-	print(request.POST)
 
 	if request.POST.get("sort_key"):
 		sort_key = request.POST.get("sort_key")
@@ -40,15 +40,38 @@ def index(request):
 
 	item_type_id = Item_Type.objects.get(type_name='Alert').id
 	items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3)  ).order_by(sort_key)
+	if request.POST.get("latitude"):
+		userlat = request.POST.get("latitude")
+		userlng = request.POST.get("longitude")
+		for item in unsorted_items:
+			item.distance = "%.1f" % distanceWrapper(item, userlat, userlng)
 
-	if reverse:
-		items = items.reverse()
+	if sort_key == "distance":
+		print("Sort by distance")
+		items = sorted(unsorted_items, key= lambda item: item.distance)
+		if reverse:
+			items = list(reversed(items))
+	elif sort_key == "created_at":
+		print("Sort by time")
+		items = sorted(unsorted_items, key= lambda item: item.created_at)
+		if reverse:
+			iitems = list(reversed(items))
+	elif sort_key == "item_priority":
+		print("Sort by priority")
+		items = sorted(unsorted_items, key= lambda item: item.item_priority)
+		if reverse:
+			items = list(reversed(items))
+	print(items)
+
+
 	template = loader.get_template('lifeline/index.html')
 	context = {
 		'items': items,
+		'lat': request.POST.get("latitude"),
+		'lng': request.POST.get("longitude")
 	}
+	print(context)
 	return HttpResponse(template.render(context, request))
-
 
 def item(request, item_id):
 
