@@ -31,10 +31,10 @@ def index(request):
 	f2 = -1
 	f3 = -1
 
-	if 'offer' in filters:
+	if 'request' in filters:
 		f1 = Item_Type.objects.get(type_name='Offer').id
 
-	if 'request' in filters:
+	if 'offer' in filters:
 		f2 = Item_Type.objects.get(type_name='Request').id
 
 	if 'alert' in filters:
