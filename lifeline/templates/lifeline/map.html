@@ -13,6 +13,7 @@
 
 {% block content %}
 
+
 <div id="map"></div>
 
 <script>
@@ -34,14 +35,53 @@
           lng: {{ item.item_longitude }}
         };
 
+        var img_alert = {
+  url: 'http://www.iconsdb.com/icons/preview/red/alert-xxl.png',
+  size: new google.maps.Size(100,100),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(25,25)
+};
+
+       var img_offer = {
+  url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/55531-200.png',
+  size: new google.maps.Size(100,100),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(25,25)
+};
+
+       var img_request = {
+  url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/61255-200.png',
+  size: new google.maps.Size(800,800),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(25,25)
+};
+
+
+    my_icon = img_alert;
+    if ('{{item.item_type}}' === 'Request') {
+          my_icon = img_request;
+        }
+
+        if ('{{item.item_type}}' === 'Offer') {
+          my_icon = img_offer;
+        }
+
 
         var marker = new google.maps.Marker({
+          icon : my_icon,
           position: pos,
           map: map,
           title: '{{item.item_name}}'
         });
+
+
+
         bindInfoWindow(marker, map, infowindow,
               '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br><br> <i>{{item.item_type}} by {{item.user}} </i> <br> {{item.created_at}} <br><br>{{item.item_description}}</a>'); 
+        
 
 
       {% endif %}
