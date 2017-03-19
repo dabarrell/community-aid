@@ -114,7 +114,7 @@ def submitted(request):
 	submit_item(request.POST, user)
 	template = loader.get_template('lifeline/submitted.html')
 
-	return HttpResponse(template.render(context, request))
+	return redirect("/")#HttpResponse(template.render(context, request))
 
 @login_required
 def comment_submitted(request):
