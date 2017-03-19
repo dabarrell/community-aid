@@ -12,6 +12,9 @@ from .utils import distance, distanceWrapper, sendMessage
 
 from django.db.models import Q
 
+#max display distance
+max_distance = 10
+
 def index(request):
 
 	#default sort key is by time
@@ -65,6 +68,12 @@ def index(request):
 		items = sorted(unsorted_items, key= lambda item: item.item_priority.id)
 		if reverse:
 			items = list(reversed(items))
+
+	def distance_filter(element):
+		return element.distanceFlt < max_distance
+	items = filter(distance_filter, items)
+
+	
 
 	template = loader.get_template('lifeline/index.html')
 	context = {
