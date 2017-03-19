@@ -54,11 +54,11 @@ def index(request):
 	elif sort_key == "created_at":
 		print("Sort by time")
 		items = sorted(unsorted_items, key= lambda item: item.created_at)
-		if reverse:
-			iitems = list(reversed(items))
+		if not reverse:
+			items = list(reversed(items))
 	elif sort_key == "item_priority":
 		print("Sort by priority")
-		items = sorted(unsorted_items, key= lambda item: item.item_priority)
+		items = sorted(unsorted_items, key= lambda item: item.item_priority.id)
 		if reverse:
 			items = list(reversed(items))
 
@@ -74,7 +74,6 @@ def index(request):
 	return HttpResponse(template.render(context, request))
 
 def item(request, item_id):
-	#DUMMY_ID='7f8de92e-efc2-4c69-8f48-8612fab4b3a6'
 
 	item = item_id
 
