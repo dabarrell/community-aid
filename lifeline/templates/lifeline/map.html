@@ -41,7 +41,7 @@
           title: '{{item.item_name}}'
         });
         bindInfoWindow(marker, map, infowindow,
-              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br> <i>{{item.item_type}}, {{item.created_at}} <br><br></i>{{item.item_description}}</a>'); 
+              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br><br> <i>{{item.item_type}} by {{item.user}} </i> <br> {{item.created_at}} <br><br>{{item.item_description}}</a>'); 
 
 
       {% endif %}
