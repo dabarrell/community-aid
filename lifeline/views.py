@@ -39,12 +39,16 @@ def index(request):
 
 	unsorted_items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3))
 
+	#default long and lat
+	userlat = -37.8001775 
+	userlng = 144.9640978
+
 	if request.POST.get("latitude"):
 		userlat = request.POST.get("latitude")
 		userlng = request.POST.get("longitude")
-		for item in unsorted_items:
-			item.distance = "%.1f" % distanceWrapper(item, userlat, userlng)
-			item.distanceFlt = distanceWrapper(item, userlat, userlng)
+	for item in unsorted_items:
+		item.distance = "%.1f" % distanceWrapper(item, userlat, userlng)
+		item.distanceFlt = distanceWrapper(item, userlat, userlng)
 
 	if sort_key == "distance":
 		print("Sort by distance")
