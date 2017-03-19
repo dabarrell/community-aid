@@ -6,19 +6,30 @@
    * element that contains the map. */
   #map {
     height: 600px;
-		width: 1000px;
+		width: 100%;
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
-
+<div class="ui text main container centered center">
+  <div class="row">
+    <br>
+      <h1 class="ui header horizontal divider">Map</h1>
+  </div></br></br>
+  <div class="row centered">
+    <div class="ui three wide column grid">
+      <div class="row centered">
 <div id="map"></div>
+</div>
+</div>
+</div>
+</div>
 
 <script>
 
-  
+
 
   function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -80,9 +91,7 @@
 
 
         bindInfoWindow(marker, map, infowindow,
-              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br><br> <i>{{item.item_type}} by {{item.user}} </i> <br> {{item.created_at}} <br><br>{{item.item_description}}</a>'); 
-        
-
+              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br><br> <i>{{item.item_type}} by {{item.user.full_name}} </i> <br> {{item.created_at}} <br><br>{{item.item_description}}</a>');
 
       {% endif %}
     {% endfor %}

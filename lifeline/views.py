@@ -43,7 +43,7 @@ def index(request):
 	unsorted_items = Item.objects.filter(Q(item_type= f1) | Q(item_type = f2) | Q(item_type = f3))
 
 	#default long and lat
-	userlat = -37.8001775 
+	userlat = -37.8001775
 	userlng = 144.9640978
 
 	if request.POST.get("latitude"):
@@ -73,7 +73,7 @@ def index(request):
 		return element.distanceFlt < max_distance
 	items = filter(distance_filter, items)
 
-	
+
 
 	template = loader.get_template('lifeline/index.html')
 	context = {
