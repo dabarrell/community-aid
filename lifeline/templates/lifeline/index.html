@@ -1,5 +1,18 @@
 {% extends "lifeline/base.html" %}
 
+{% block head %}
+<style>
+#id01{
+  position: absolute;
+  left: 39%;
+  margin-left: -312px;
+  height: 535x;
+  top: 50%;
+  margin-top: -250px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <form action="{% url 'lifeline:index' %}" method="post">
 {% csrf_token %}
