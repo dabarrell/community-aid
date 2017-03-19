@@ -1,29 +1,42 @@
- /* CUSTOM CLASSES */
+/* CUSTOM CLASSES */
 
 
 /*-------------------
    LABEL PRIORITIES
 --------------------*/
 
-.ui.high-priority.label {
+.ui.Critical.label {
     background-color: #DB2828 !important;
     border-color: #DB2828 !important;
     color: #FFFFFF !important;
 }
 
-.ui.medium-priority.label {
+.ui.Moderate.label {
     background-color: #FBBD08 !important;
     border-color: #FBBD08 !important;
     color: #FFFFFF !important;
 }
 
-.ui.low-priority.label {
+.ui.Low.label {
     background-color: #767676 !important;
     border-color: #767676 !important;
     color: #FFFFFF !important;
 }
 
 
+/* VIEW POST */
+.ui.inverted.Critical.segment {
+  background-color: #DB2828 !important;
+  color: #FFFFFF !important;
+}
+.ui.inverted.Moderate.segment {
+  background-color: #FBBD08 !important;
+  color: #FFFFFF !important;
+}
+.ui.inverted.Low.segment {
+  background-color: #767676 !important;
+  color: #FFFFFF !important;
+}
 /*******************************
              Icon
 *******************************/
@@ -64,23 +77,60 @@ i.icon:before {
 /*------------
 ICONS
 ----------*/
-i.High.icon:before {
+i.icon.Critical:before {
   content: "\f12a\f12a\f12a";
 }
-i.icon.Medium:before {
+i.icon.Moderate:before {
   content: "\f12a\f12a";
 }
 i.icon.Low:before {
   content: "\f12a";
 }
+i.icon.Electricity\/Gas:before {
+  content: "\f1e6";
+}
+i.icon.Hazard:before {
+  content: "\f071";
+}
+i.icon.Transport:before {
+  content: "\f1b9";
+}
+i.icon.Food:before {
+  content: "\f0f5";
+}
+i.icon.Supplies:before {
+  content: "\f1b3";
+}
+i.icon.Water:before {
+  content: "\f2cc";
+}
+i.icon.Emergency:before {
+  content: "\f0fe";
+}
+i.icon.Maintenance:before {
+  content: "\f085";
+}
+i.icon.Food\sand\sDrink:before {
+  content: "\f0f4";
+}
+i.icon.Request:before {
+  content: "\f29c";
+}
+i.icon.Alert:before {
+  content: "\f06a";
+}
+i.icon.Offer:before {
+  content: "\f118";
+}
+
 
 /* Labels */
-.ui.High.label {
+.ui.Critical.label {
   background-color: #DB2828 !important;
   border-color: #DB2828 !important;
   color: #FFFFFF !important;
 }
-.ui.Medium.label {
+.ui.Moderate.label {
   background-color: #FBBD08 !important;
   border-color: #FBBD08 !important;
   color: #FFFFFF !important;
@@ -95,11 +145,11 @@ i.icon.Low:before {
        CARD PRIORITIES
 --------------------*/
 
-.ui.cards > .ui.High.card {
+.ui.cards > .ui.Critical.card {
     box-shadow: 0px 0px 0px 1px #DB2828, 0px 2px 0px 0px #DB2828, 0px 1px 3px 0px #DB2828;
 }
 
-.ui.cards > .ui.Medium.card {
+.ui.cards > .ui.Moderate.card {
     box-shadow: 0px 0px 0px 1px #FBBD08, 0px 2px 0px 0px #FBBD08, 0px 1px 3px 0px #FBBD08;
 }
 
