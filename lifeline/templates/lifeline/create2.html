@@ -1,0 +1,163 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 500px;
+		width: 500px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<b>Create Post </b>
+<br><br><br><br>
+
+
+<form action="{% url 'lifeline:submitted' %}" method="post">
+{% csrf_token %}
+
+Item name:  <input type="text" name="item_name"> <br> <br>
+
+Item location:  <input type="hidden" name="latitude" id="latitude" value="" />
+<input type="hidden" name="longitude" id="longitude" value="" />
+
+<input id="pac-input" width="200px"/>
+
+<div id="map"></div>
+
+<br> <br>
+
+Item priority:  <select name="item_priority">
+{% for priority in priorities %}
+		<option value="{{priority}}"> {{priority}}</option>
+	{% endfor %}
+	</select> <br> <br>
+
+Item category:  <select name="item_category">
+{% for category in categories %}
+		<option value="{{category}}"> {{category}}</option>
+	{% endfor %}
+	</select> <br> <br>
+
+
+Item type:  <select name="item_type">
+{% for type in types %}
+		<option value="{{type}}"> {{type}}</option>
+	{% endfor %}
+	</select> <br> <br>
+
+Item description:  <br><br><textarea name="item_description" cols="100" rows="8"> </textarea><br> <br>
+
+<input type="submit" value="Post"/>
+
+</form>
+<br><br><br><br>
+
+<i> Logged in as: {{user}} <i>
+
+	<script>
+		function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: -37.8001998, lng: 144.9641445},
+				zoom: 13
+			});
+			var input = /** @type {!HTMLInputElement} */ (
+	    document.getElementById('pac-input'));
+		  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+		  var autocomplete = new google.maps.places.Autocomplete(input);
+		  autocomplete.bindTo('bounds', map);
+
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+
+					document.getElementById("latitude").value = position.coords.latitude;
+					document.getElementById("longitude").value = position.coords.longitude;
+
+					var marker = new google.maps.Marker({
+				    position: pos,
+				    map: map,
+						draggable: true,
+						animation: google.maps.Animation.DROP
+				  });
+					marker.addListener('click', toggleBounce);
+
+					marker.setIcon( /** @type {google.maps.Icon} */ ({
+						url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+						size: new google.maps.Size(71, 71),
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(17, 34),
+						scaledSize: new google.maps.Size(35, 35)
+					}));
+
+					map.setCenter(pos);
+
+					google.maps.event.addListener(marker, 'dragend', function() {
+						document.getElementsByName('latitude')[0].value = marker.getPosition().lat();
+						document.getElementsByName('longitude')[0].value = marker.getPosition().lng();
+						// var pos = {
+						// 	lat: marker.getPosition().lat(),
+						// 	lng: marker.getPosition().lng()
+						// };
+						// marker.getMap().setCenter(pos);
+					})
+
+					autocomplete.addListener('place_changed', function() {
+				    marker.setVisible(false);
+				    var place = autocomplete.getPlace();
+				    if (!place.geometry) {
+				      window.alert("Autocomplete's returned place contains no geometry");
+				      return;
+				    }
+
+				    // If the place has a geometry, then present it on a map.
+				    if (place.geometry.viewport) {
+				      map.fitBounds(place.geometry.viewport);
+				    } else {
+				      map.setCenter(place.geometry.location);
+				      map.setZoom(11); // Why 17? Because it looks good.
+				    }
+
+				    marker.setPosition(place.geometry.location);
+				    marker.setVisible(true);
+
+				  });
+				}, function() {
+					handleLocationError(true, map);
+				});
+			} else {
+				// Browser doesn't support Geolocation
+				handleLocationError(false, map);
+			}
+		}
+
+		function toggleBounce() {
+		  if (marker.getAnimation() !== null) {
+		    marker.setAnimation(null);
+		  } else {
+		    marker.setAnimation(google.maps.Animation.BOUNCE);
+		  }
+		}
+
+		function handleLocationError(browserHasGeolocation, map) {
+			var infoWindow = new google.maps.InfoWindow({map: map});
+			infoWindow.setPosition(map.getCenter());
+			infoWindow.setContent(browserHasGeolocation ?
+														'Error: The Geolocation service failed.' :
+														'Error: Your browser doesn\'t support geolocation.');
+		}
+	</script>
+	<script async defer type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap&libraries=places">
+	</script>
+
+{% endblock %}

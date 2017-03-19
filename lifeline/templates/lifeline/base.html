@@ -6,13 +6,15 @@
     <link rel="stylesheet" href="{% static "lifeline/css/semantic.css" %}">
     <script type="text/javascript" src="{% static "lifeline/js/jquery-3.2.0.min.js" %}"></script>
     <script type="text/javascript" src="{% static "lifeline/js/semantic.min.js" %}"></script>
-    <link rel="stylesheet" href="{% static "lifeline/css/customecss.css" %}">
+    <link rel="stylesheet" href="{% static "lifeline/css/customcss.css" %}">
     {% block head %}{% endblock %}
 </head>
 
 <body>
     <div class="ui menu">
-        <div class="header item">LIFELINE</div>
+        <div class="header item">
+            <img class="logo1" src="{% static "lifeline/images/logo1.png" %}">
+            LifeLine</div>
         <a href="/" class="item">News Feed</a>
         <a href="/create" class="item">Post Request</a>
         <a href="/map" class="item">Map</a>

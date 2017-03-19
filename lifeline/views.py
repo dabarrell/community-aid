@@ -62,13 +62,23 @@ def index(request):
 		if reverse:
 			items = list(reversed(items))
 
+	user = User.objects.get(user=request.user)
+
+	categories = Item_Category.objects.all()
+	priorities = Item_Priority.objects.all()
+	types = Item_Type.objects.all()
+
 	template = loader.get_template('lifeline/index.html')
 	context = {
 		'items': items,
 		'lat': request.POST.get("latitude"),
 		'lng': request.POST.get("longitude"),
 		'sort_key': sort_key,
-		'filters': filters
+		'filters': filters,
+		'priorities': priorities,
+		'categories': categories,
+		'types': types,
+		'user' : user
 	}
 	print(context)
 	return HttpResponse(template.render(context, request))
