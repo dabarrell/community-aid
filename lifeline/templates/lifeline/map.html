@@ -20,7 +20,8 @@
   </div></br></br>
   <div class="row centered">
     <div class="ui three wide column grid">
-      <div class="row centered">
+      <div class="row centered ui">
+        <input id="pac-input" width="50px" style="width: 500px !important; margin: 10px"/>
 <div id="map"></div>
 
 </div>
@@ -37,8 +38,30 @@
       center: {lat: -37.8001998, lng: 144.9641445},
       zoom: 13
     });
+    var input = /** @type {!HTMLInputElement} */ (
+    document.getElementById('pac-input'));
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
 
     var infowindow = new google.maps.InfoWindow({});
+
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        window.alert("Autocomplete's returned place contains no geometry");
+        return;
+      }
+
+      // If the place has a geometry, then present it on a map.
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+      }
+
+    });
 
     {% for item in items %}
       {% if item.item_longitude %}
@@ -108,7 +131,7 @@
   }
 </script>
 <script async defer
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap&libraries=places">
 </script>
 
 {% endblock %}
