@@ -89,16 +89,18 @@
                                     <a class="ui {{ item.item_priority }} label right floated"><i class="{{ item.item_priority }} icon"></i>{{ item.item_priority }}</a>
                                 </div>
                                 <div class="meta">
-                                    {{ item.distance }} km from you
+                                    {{ item.distance }} km from you, posted {{ item.created_at }}
                                 </div>
+
                                 <div class="description">
-                                    {{ item.item_name }}
+                                    <b>{{ item.item_name }}</b>
                                 </div>
                             </div>
                             <div class="extra content">
                                 <div class="ui large labels center aligned">
-                                    <a class="ui {{ item.item_type }} label"><i class="announcement icon"></i>{{ item.item_type }}<div class="detail">Type</div></a>
-                                    <a class="ui {{ item.item_category }} label"><i class="plug icon"></i>{{ item.item_category }}<div class="detail">Category</div></a>
+                                    <a class="ui {{ item.item_type }} label"><i class="announcement icon"></i> &nbsp &nbsp{{ item.item_type }}<div class="detail"> &nbsp &nbsp</div></a>
+                                    <a class="ui {{ item.item_category }} label"><i class="plug icon"></i> &nbsp &nbsp{{ item.item_category }}<div class="detail"> &nbsp &nbsp</div></a>
+
                                 </div>
                             </div>
                             <div class="extra content">
