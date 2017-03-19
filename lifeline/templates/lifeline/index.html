@@ -1,38 +1,46 @@
 {% extends "lifeline/base.html" %} {% block content %} {% if items %}
-<div class="ui feed">
-    {% for item in items %}
-    <div class="event">
-        <div class="ui cards">
-            <div class="{{ item.user.priority_name }} card">
-                <div class="content">
-                    <img class="left floated mini ui image" src="assets/images/photos/Levi.jpg">
-                    <div class="header">
-                        {{ item.user.full_name }}
-                    </div>
-                    <div class="meta">
-                        5km from you
-                    </div>
-                    <div class="description">
-                        {{ item.item_name }}
-                    </div>
-                </div>
-                <div class="extra content">
-                    <div class="ui large labels center aligned">
-                        <a class="ui blue label"><i class="announcement icon"></i>Alert<div class="detail">Type</div></a>
-                        <a class="ui yellow label"><i class="plug icon"></i>{{ item.user.category_name }}<div class="detail">Category</div></a>
-                    </div>
-                </div>
-                <div class="extra content">
-                    <div class="ui two buttons">
-                        <button class="ui basic green button">More Info</button>
-                        <button class="ui basic red button">Contact</button>
+<div class="ui three column grid">
+    <div class="four wide column"></div>
+    <div class="eight wide column">
+        <div class="ui feed">
+            {% for item in items %}
+            <div class="row">
+                <div class="event">
+                    <div class="ui cards">
+                        <div class="ui {{ item.item_priority }} card">
+                            <div class="content">
+                                <img class="left floated mini ui image" src="assets/images/photos/Levi.jpg">
+                                <div class="header">
+                                    {{ item.user.full_name }}
+                                </div>
+                                <div class="meta">
+                                    5km from you
+                                </div>
+                                <div class="description">
+                                    {{ item.item_name }}
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <div class="ui large labels center aligned">
+                                    <a class="ui {{ item.item_type }} label"><i class="announcement icon"></i>{{ item.item_type }}<div class="detail">Type</div></a>
+                                    <a class="ui {{ item.item_category }} label"><i class="plug icon"></i>{{ item.item_category }}<div class="detail">Category</div></a>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <div class="ui two buttons">
+                                    <button class="ui basic green button">More Info</button>
+                                    <button class="ui basic red button">Contact</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
+        {% else %}
+        <p>No items are available.</p>
     </div>
-    {% endfor %}
+    <div class="four wide column"></div>
 </div>
-{% else %}
-<p>No items are available.</p>
 {% endif %} {% endblock %}
