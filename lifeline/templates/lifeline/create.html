@@ -1,0 +1,201 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 500px;
+		width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ui main text centered container">
+<div></br>
+	<h1 class="ui center aligned header horizontal divider">Create Post</h1>
+<div>
+	<div>
+		<div>
+	<div>
+	</br>
+		<form action="{% url 'lifeline:submitted' %}" method="post" class="ui form">
+		{% csrf_token %}
+		</br>
+		<div class="field">
+			<label>Title</label>
+			 </div>
+				 <div class="field">
+					 <input style="width:100%;" name="item_name" type="text">
+				 </div>
+
+				 <div class="field">
+					 <label>Summary of Task</label>
+					 <p><i>Please provide a brief summary of your request - this is to help others understand
+						 the problem and what is required. Include information such as a description of the task and
+						 the resources required.
+					 </i></p>
+				 </div>
+				 <div class="ui form">
+			<div class="field">
+				<textarea name="item_description" rows="5"></textarea>
+			</div>
+		</div>
+		</br>
+		</br>
+			<div class="field">
+				<label>Category</label>
+				<p><i>Please select the category that best matches your task.
+				</i></p>
+					 <select name="item_category" class="ui dropdown">
+						 <option value=" ">Select category</option>
+						 {% for category in categories %}
+								<option value="{{category}}">{{category}}</option>
+						 {% endfor %}
+					 </select>
+		</div></br>
+		<div class="field">
+			<label>Priority Level</label>
+			<p><i>Please grade the priority level of your task. </br> This grading should not
+				reflect the task's level of priority to you, but within the community as a whole.
+			</i></p>
+				 <select name="item_priority" class="ui dropdown">
+					 <option value=" ">Select priority</option>
+					 {% for p in priorities %}
+							<option value="{{p}}">{{p}}</option>
+					 {% endfor %}
+				 </select>
+	</div></br>
+	<div class="field">
+		<label>Type</label>
+		<p><i>Please select the type of your item.
+		</i></p>
+			 <select name="item_type" class="ui dropdown">
+				 <option value=" ">Select type</option>
+				 {% for p in types %}
+						<option value="{{p}}">{{p}}</option>
+				 {% endfor %}
+			 </select>
+</div></br>
+
+		<div class="field">
+			<label>Location</label>
+			 </div>
+			 <input id="pac-input" width="50px" style="width: 500px !important; margin: 10px"/>
+
+			 <div id="map"></div>
+			 <input type="hidden" name="latitude" id="latitude" value="" />
+			 <input type="hidden" name="longitude" id="longitude" value="" />
+		 </div>
+		 </br>
+			 <input class="ui blue submit inverted button" type="submit" value="Submit"/>
+		 </form>
+		 </div>
+					 </br></br>
+</div>
+</div>
+</div>
+
+	<script>
+		function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: -37.8001998, lng: 144.9641445},
+				zoom: 13
+			});
+			var input = /** @type {!HTMLInputElement} */ (
+	    document.getElementById('pac-input'));
+		  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+		  var autocomplete = new google.maps.places.Autocomplete(input);
+		  autocomplete.bindTo('bounds', map);
+
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+
+					document.getElementById("latitude").value = position.coords.latitude;
+					document.getElementById("longitude").value = position.coords.longitude;
+
+					var marker = new google.maps.Marker({
+				    position: pos,
+				    map: map,
+						draggable: true,
+						animation: google.maps.Animation.DROP
+				  });
+					marker.addListener('click', toggleBounce);
+
+					marker.setIcon( /** @type {google.maps.Icon} */ ({
+						url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+						size: new google.maps.Size(71, 71),
+						origin: new google.maps.Point(0, 0),
+						anchor: new google.maps.Point(17, 34),
+						scaledSize: new google.maps.Size(35, 35)
+					}));
+
+					map.setCenter(pos);
+
+					google.maps.event.addListener(marker, 'dragend', function() {
+						document.getElementsByName('latitude')[0].value = marker.getPosition().lat();
+						document.getElementsByName('longitude')[0].value = marker.getPosition().lng();
+						// var pos = {
+						// 	lat: marker.getPosition().lat(),
+						// 	lng: marker.getPosition().lng()
+						// };
+						// marker.getMap().setCenter(pos);
+					})
+
+					autocomplete.addListener('place_changed', function() {
+				    marker.setVisible(false);
+				    var place = autocomplete.getPlace();
+				    if (!place.geometry) {
+				      window.alert("Autocomplete's returned place contains no geometry");
+				      return;
+				    }
+
+				    // If the place has a geometry, then present it on a map.
+				    if (place.geometry.viewport) {
+				      map.fitBounds(place.geometry.viewport);
+				    } else {
+				      map.setCenter(place.geometry.location);
+				      map.setZoom(11); // Why 17? Because it looks good.
+				    }
+
+				    marker.setPosition(place.geometry.location);
+				    marker.setVisible(true);
+
+				  });
+				}, function() {
+					handleLocationError(true, map);
+				});
+			} else {
+				// Browser doesn't support Geolocation
+				handleLocationError(false, map);
+			}
+		}
+
+		function toggleBounce() {
+		  if (marker.getAnimation() !== null) {
+		    marker.setAnimation(null);
+		  } else {
+		    marker.setAnimation(google.maps.Animation.BOUNCE);
+		  }
+		}
+
+		function handleLocationError(browserHasGeolocation, map) {
+			var infoWindow = new google.maps.InfoWindow({map: map});
+			infoWindow.setPosition(map.getCenter());
+			infoWindow.setContent(browserHasGeolocation ?
+														'Error: The Geolocation service failed.' :
+														'Error: Your browser doesn\'t support geolocation.');
+		}
+	</script>
+	<script async defer type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap&libraries=places">
+	</script>
+
+{% endblock %}

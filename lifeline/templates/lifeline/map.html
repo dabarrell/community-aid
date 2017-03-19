@@ -1,0 +1,137 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 600px;
+		width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="ui text main container centered center">
+  <div class="row">
+    <br>
+      <h1 class="ui header horizontal divider">Map</h1>
+  </div></br></br>
+  <div class="row centered">
+    <div class="ui three wide column grid">
+      <div class="row centered ui">
+        <input id="pac-input" width="50px" style="width: 500px !important; margin: 10px"/>
+<div id="map"></div>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+
+
+
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -37.8001998, lng: 144.9641445},
+      zoom: 13
+    });
+    var input = /** @type {!HTMLInputElement} */ (
+    document.getElementById('pac-input'));
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
+
+    var infowindow = new google.maps.InfoWindow({});
+
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        window.alert("Autocomplete's returned place contains no geometry");
+        return;
+      }
+
+      // If the place has a geometry, then present it on a map.
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+      }
+
+    });
+
+    {% for item in items %}
+      {% if item.item_longitude %}
+        var pos = {
+          lat: {{ item.item_latitude }},
+          lng: {{ item.item_longitude }}
+        };
+
+        var img_alert = {
+  url: 'http://www.iconsdb.com/icons/preview/red/alert-xxl.png',
+  size: new google.maps.Size(30,30),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(25,25)
+};
+
+       var img_offer = {
+  url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/55531-200.png',
+  size: new google.maps.Size(30,30),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(30,30)
+};
+
+       var img_request = {
+  url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/61255-200.png',
+  size: new google.maps.Size(30,30),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(30,30)
+};
+
+
+    my_icon = img_alert;
+    if ('{{item.item_type}}' === 'Request') {
+          my_icon = img_request;
+        }
+
+        if ('{{item.item_type}}' === 'Offer') {
+          my_icon = img_offer;
+        }
+
+
+        var marker = new google.maps.Marker({
+          icon : my_icon,
+          position: pos,
+          map: map,
+          title: '{{item.item_name}}'
+        });
+
+
+
+        bindInfoWindow(marker, map, infowindow,
+              '<a href = "../item/{{item.id}}" style="color: black; text-decoration: none;"><b>{{item.item_name}}</b><br><br> <i>{{item.item_type}} by {{item.user.full_name}} </i> <br> {{item.created_at}} <br><br>{{item.item_description}}</a>');
+
+      {% endif %}
+    {% endfor %}
+
+    function bindInfoWindow(marker, map, infowindow, html) {
+    marker.addListener('click', function() {
+        infowindow.setContent(html);
+        infowindow.open(map, this);
+    });
+}
+
+
+  }
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap&libraries=places">
+</script>
+
+{% endblock %}

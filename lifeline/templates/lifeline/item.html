@@ -1,0 +1,108 @@
+{% extends "lifeline/base.html" %}
+
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 100%;
+		width: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ui main container">
+    <div class="ui text container">
+        <div class="row"><br>
+            <h1 class="ui header horizontal divider">View Post</h1>
+        </div>
+        </br>
+        </br>
+    </div>
+    <div class="ui text container">
+        <div class="ui items">
+            <div class="item">
+                <div class="content">
+                    <div class="header">{{ item_name }}</div>
+                    <div class="meta">
+                        <span class="priority" class="category">{{ item_priority }} | {{ item_category }}</span>
+                    </div><br>
+                    <div class="description">
+                        <p>{{ item_description }}</p>
+                    </div>
+                    </br>
+                    <div class="meta">
+                        <span class="contact details">Contact Details:</span>
+                        <span class="contact name">{{ user2.full_name }},</span>
+                        <span class="contact number">{{ user2.phone }}</span>
+                    </div>
+                    </br>
+                    <div style="height:450px;width:100%;margin-bottom:20px">
+                        <div id="map"></div>
+                    </div>
+                    <div class="ui sizer vertical segment">
+                        <div class="ui medium header">Comments</div>
+                        <p></p>
+                    </div>
+                    <div class="ui comments">
+
+                      {% for comment in comments %}
+                        <div class="comment">
+                            <div class="content">
+                                <a class="author">{{ comment.user.full_name }}</a>
+                                <div class="metadata">
+                                    <div class="date">{{ comment.created_at }}</div>
+                                </div>
+                                <div class="text">
+                                    {{ comment.comment_text }}
+                                </div>
+                            </div>
+                        </div>
+                        	{% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="{% url 'lifeline:comment_submitted' %}" method="post" class="ui reply form">
+          {% csrf_token %}
+          <input type = "hidden" name="item" value="{{item_id}}">
+                <textarea name="comment_text" cols="100" rows="8"></textarea>
+                <br>
+            <input style="margin-top:10px;"class="ui primary submit button" type="submit" value="Submit Comment"/>
+
+        </form>
+    </div>
+  </div>
+  <script>
+	  function initMap() {
+	    var map = new google.maps.Map(document.getElementById('map'), {
+	      center: {lat: -37.8001998, lng: 144.9641445},
+	      zoom: 11
+	    });
+
+      var pos = {
+        lat: {{ item_latitude }},
+        lng: {{ item_longitude }}
+      };
+
+      var marker = new google.maps.Marker({
+        position: pos,
+        map: map
+      });
+
+			marker.setIcon( /** @type {google.maps.Icon} */ ({
+				url: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(35, 35)
+			}));
+
+
+	  }
+	</script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
+	</script>
+{% endblock %}
