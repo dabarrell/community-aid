@@ -92,6 +92,10 @@ i.icon.Electricity\/Gas:before {
 i.icon.Hazard:before {
   content: "\f071";
 }
+
+i.icon.Other:before {
+  content: "\f071";
+}
 i.icon.Transport:before {
   content: "\f1b9";
 }
@@ -225,6 +229,11 @@ CARD LABELS
 
 /* CATEGORY */
 .Hazard.label {
+  background-color: #DB2828 !important;
+  border-color: #DB2828 !important;
+  color: #FFFFFF !important;
+}
+.Other.label {
   background-color: #DB2828 !important;
   border-color: #DB2828 !important;
   color: #FFFFFF !important;
