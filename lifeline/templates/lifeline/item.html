@@ -5,72 +5,76 @@
   /* Always set the map height explicitly to define the size of the div
    * element that contains the map. */
   #map {
-    height: 500px;
-		width: 500px;
+    height: 100%;
+		width: 100%;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<b>View Post </b>
-<br><br><br><br>
+<div class="ui main container">
+    <div class="ui text container">
+        <div class="row"><br>
+            <h1 class="ui header horizontal divider">View Post</h1>
+        </div>
+        </br>
+        </br>
+    </div>
+    <div class="ui text container">
+        <div class="ui items">
+            <div class="item">
+                <div class="content">
+                    <div class="header">{{ item_name }}</div>
+                    <div class="meta">
+                        <span class="priority" class="category">{{ item_priority }} | {{ item_category }}</span>
+                    </div><br>
+                    <div class="description">
+                        <p>{{ item_description }}</p>
+                    </div>
+                    </br>
+                    <div class="meta">
+                        <span class="contact details">Contact Details:</span>
+                        <span class="contact name">{{ user2.full_name }},</span>
+                        <span class="contact number">{{ user2.phone }}</span>
+                    </div>
+                    </br>
+                    <div style="height:450px;width:100%;margin-bottom:20px">
+                        <div id="map"></div>
+                    </div>
+                    <div class="ui sizer vertical segment">
+                        <div class="ui medium header">Comments</div>
+                        <p></p>
+                    </div>
+                    <div class="ui comments">
 
-{% csrf_token %}
+                      {% for comment in comments %}
+                        <div class="comment">
+                            <div class="content">
+                                <a class="author">{{ comment.user.full_name }}</a>
+                                <div class="metadata">
+                                    <div class="date">{{ comment.created_at }}</div>
+                                </div>
+                                <div class="text">
+                                    {{ comment.comment_text }}
+                                </div>
+                            </div>
+                        </div>
+                        	{% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="{% url 'lifeline:comment_submitted' %}" method="post" class="ui reply form">
+          {% csrf_token %}
+          <input type = "hidden" name="item" value="{{item_id}}">
+                <textarea name="comment_text" cols="100" rows="8"></textarea>
+                <br>
+            <input style="margin-top:10px;"class="ui primary submit button" type="submit" value="Submit Comment"/>
 
-Item name: {{item_name}}
-
-<br><br>
-
-Item location:
-<div id="map"></div>
-<br><br>
-Item priority:  {{item_priority}}
-
-<br><br>
-Item category:  {{item_category}}
-
-<br><br>
-
-Item type:  {{item_type}}
-<br><br>
-Item description:  <br> {{item_description}} <br>
-
-<br><br><br><br>
-
-Comments:
-<br><br>
-
-
-{% for comment in comments %}
-		<br><br>
-		<b>{{comment.user.full_name}}</b>,  <i> {{comment.created_at}} </i>
-		<br>
-		{{comment.comment_text}}
-		<br><br>
-	{% endfor %}
-
-<br><br>
-
-<form action="{% url 'lifeline:comment_submitted' %}" method="post">
-{% csrf_token %}
-
-Write a comment: <br><br> <textarea name="comment_text" cols="100" rows="8"> </textarea><br> <br>
-
-<br>
-
-<input type = "hidden" name="item" value="{{item_id}}">
-
-<input type="submit" value="Submit Comment"/>
-
-</form>
-
-<br><br><br><br>
-
-
-
-<i> Logged in as: {{user}} <i>
-
-	<script>
+        </form>
+    </div>
+  </div>
+  <script>
 	  function initMap() {
 	    var map = new google.maps.Map(document.getElementById('map'), {
 	      center: {lat: -37.8001998, lng: 144.9641445},
@@ -101,5 +105,4 @@ Write a comment: <br><br> <textarea name="comment_text" cols="100" rows="8"> </t
 	<script async defer
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMxdAEW3O9Ik80TCxcZ3QXQgHSsIuFXPg&callback=initMap">
 	</script>
-
 {% endblock %}

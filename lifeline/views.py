@@ -92,6 +92,8 @@ def item(request, item_id):
 
 	context = {
 		'item_id': item,
+		'item': Item.objects.get(pk=item),
+        'user2': Item.objects.get(pk=item).user,
 		'item_name': Item.objects.get(pk=item).item_name,
 		'item_description': Item.objects.get(pk=item).item_description,
 		'item_priority': Item.objects.get(pk=item).item_priority,
@@ -100,7 +102,6 @@ def item(request, item_id):
 		'item_longitude': Item.objects.get(pk=item).item_longitude,
 		'item_latitude': Item.objects.get(pk=item).item_latitude,
 		'comments' : Comment.objects.filter(item_id=item).order_by('created_at')
-
 	}
 	template = loader.get_template('lifeline/item.html')
 
