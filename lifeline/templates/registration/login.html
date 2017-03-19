@@ -1,36 +1,50 @@
 {% extends "lifeline/base.html" %}
 
 {% block content %}
+<div class="ui text main container centered center">
+  <div class="row">
+    <br>
+      <h1 class="ui header horizontal divider">Log in</h1>
+  </div></br></br>
+  <div class="row centered">
+    <div class="ui three wide column grid">
+      <div class="row centered">
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% else %}
+            <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+        <form method="post" action="{% url 'lifeline:login' %}">
+        {% csrf_token %}
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr><br />
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table><br />
 
-<form method="post" action="{% url 'lifeline:login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+        <input class="ui tiny floated blue basic button" type="submit" value="login" />
+        <input type="hidden" name="next" value="../" />
+        </form>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="../" />
-</form>
+</div>
+</div>
+</div>
+</div>
+
+
 
 {# Assumes you setup the password_reset view in your URLconf #}
 {# <p><a href="{% url 'lifeline:password_reset' %}">Lost password?</a></p>#}
